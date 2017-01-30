@@ -1,6 +1,6 @@
-(ns chipper.gates_test
+(ns chipee.gates_test
   (:use midje.sweet
-        chipper.gates))
+        chipee.gates))
 
 ;; macroexpansions
 (fact "defprimitive nand* - primitive vase"

@@ -1,4 +1,4 @@
-(ns chipper.utils)
+(ns chipee.utils)
 
 (defn kws->syms
   "Turns [:a :b] into [a b]"

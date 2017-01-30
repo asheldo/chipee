@@ -1,5 +1,5 @@
-(ns chipper.core_test
-  (:use chipper.core
+(ns chipee.core_test
+  (:use chipee.core
         midje.sweet))
 
 ;; we should prolly test our beloved core.

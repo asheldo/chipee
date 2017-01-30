@@ -1,5 +1,5 @@
-(ns chipper.core
-  (:use chipper.utils))
+(ns chipee.core
+  (:use chipee.utils))
 
 (defn expand-defgate
   "Recursive function that expands forms into regular functions.
