@@ -34,3 +34,12 @@
   (not* [sel] => [nsel])
   (and* [in nsel] => [a])
   (and* [in sel] => [b]))
+
+; extend - binadd
+
+(cc/defgate add* [a b] => [carry sum]
+  (xor* [a b] => [sum])
+  (and* [a b] => [carry]))
+
+
+

@@ -1,22 +1,55 @@
 (ns chipee.app
  ; (:use [chipee.gates])
+  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
+   [chipee.gates :as gates]
+   [chipee.model :as model]
    [reagent.core :as reagent :refer [atom]]
-   [chipee.gates :as g]))
+   [cljs.core.async :refer [<! put! chan]]
+   ))
 
-(defn some-component []
+(defn calc-atom [model c-atom]
+  (model/eval-str-chan @model
+                       c-atom))
+
+(defn some-component [default model c-atom]
   [:div
-   [:h3 "I am a component!"]
+   [:h3 [:span {:style {:color "red"}} "I am a "]
+    [:strong " modeling component!:"]]
+   [:textarea {:defaultValue default
+               :onChange 
+               #(let [value (reset! model (-> % .-target .-value))]
+                  (go (<! (calc-atom model c-atom)))
+                  )}]])
+
+
+; can't put (go) in component that would get re-rendered recursively
+(defn report-component [c-atom]
+  [:div
+   [:h4 "And I am dynamic:"]
    [:p.someclass
-    "I have " [:strong "bold"]
-    [:span {:style {:color "red"}} " and red"]
-    " text."
-   (str (g/not* 1))]])
+    [:strong (str @c-atom)]
+    ]])
 
-(defn calling-component []
+(defn calling-component [ch-model default model c-atom]
   [:div "Parent component"
-   [some-component]])
+   [some-component default model c-atom]   
+   [report-component c-atom]])
 
+                                        ;";(in-ns 'chipee.gates)\n"
+                                        ;goog.require('cljs.core')
+                                        ;.require('chipee.gates'); 'chipee.gates)"
+                                        ;"(inc 1)" ;              
+(def model-str
+  (str
+   "(chipee.gates/and* \n 0 1)"))
+
+; can't put (go) in component that would get re-rendered recursively!
 (defn init []
-  (reagent/render-component [calling-component]
-                            (.getElementById js/document "container")))
+  (let [model (atom model-str)
+        c-atom (atom "... please wait ...")
+        ch-model (chan)
+        ch (go (<! (calc-atom model c-atom)))]
+    (reagent/render-component
+     [calling-component ch-model model-str model c-atom]
+     (.getElementById js/document "container"))))
