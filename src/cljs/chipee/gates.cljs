@@ -37,9 +37,24 @@
 
 ; extend - binadd
 
-(cc/defgate add* [a b] => [carry sum]
+(cc/defgate binadd* [a b] => [carry sum]
   (xor* [a b] => [sum])
   (and* [a b] => [carry]))
 
+
+; event gates
+
+; intermediate
+(cc/defprimitive event* [prior prob] => [out]
+  [(* prior prob)])
+
+(cc/defgate top* [prior] => [out]
+  (event* [prior 1.0] => [out]))
+
+(cc/defgate basic* [prob] => [out]
+  (event* [1.0 prob] => [out]))
+
+(cc/defgate undeveloped* [prob] => [out]
+  (event* [1.0 prob] => [out]))
 
 

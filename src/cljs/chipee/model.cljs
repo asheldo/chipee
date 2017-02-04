@@ -1,7 +1,7 @@
 (ns chipee.model
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.tools.reader :refer [read-string]]
-            [cljs.js :refer [empty-state eval js-eval]]
+            [cljs.js :refer [empty-state eval eval-str js-eval]]
             ;[cljs-http.client :as http]
             [goog.net.XhrIo :as xhr]
             [cljs.core.async :refer [<! put! chan]]
@@ -44,15 +44,29 @@
     (reset!
      c-atom           
      (eval
-      ;st ;
-      (let [val (<! (load-cache st "chipee.gates" {}))]
-        st)
-      (read-string code)
+       ; (let [val (<! (load-cache st "chipee.gates" {}))] st)
+      (cljs.js/empty-state)
+      (read-string
+       (str code)
+      )
       {:eval       js-eval
+       :def-emits-var true
        :source-map true
        :context    :statement}
       (fn [result] result)))))
 
+(comment
 
+  :ns (current-ns)
+    :context (or (:context user-opts) :expr)
+    :source-map false
+    :def-emits-var true
+    :load (:load-fn! user-opts)
+    :eval (make-js-eval-fn user-opts)
+    :verbose (or (:verbose user-opts) false)
+    :*compiler* (set! env/*compiler* st)
+    :static-fns (or (:static-fns user-opts) false)
+
+  )
 
 

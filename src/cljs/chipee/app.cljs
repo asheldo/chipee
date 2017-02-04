@@ -16,7 +16,7 @@
   [:div
    [:h3 [:span {:style {:color "red"}} "I am a "]
     [:strong " modeling component!:"]]
-   [:textarea {:defaultValue default
+   [:textarea {:defaultValue default :rows 5 :cols 40
                :onChange 
                #(let [value (reset! model (-> % .-target .-value))]
                   (go (<! (calc-atom model c-atom)))
@@ -42,7 +42,12 @@
                                         ;"(inc 1)" ;              
 (def model-str
   (str
-   "(chipee.gates/and* \n 0 1)"))
+;   "(chipee.gates/and* \n 0 1)"
+;   "(let [a 1]\n (chipee.gates/nand* 0 1))"
+; (let [a 1 b 1 c chipee.app/model-str] (chipee.gates/nand* a b))
+   "(let [a 1 b 1]
+ (chipee.gates/nand* a b))"
+   ))
 
 ; can't put (go) in component that would get re-rendered recursively!
 (defn init []

@@ -1,3 +1,15 @@
+# Chipee
+
+Chipee is a permanent fork of Chipper. Some changes:
+
+- Using boot instead of project.clj (Leiningen):
+-- install boot-clj e.g. via curl or wget
+-- run "boot dev" (or other "environment" i.e. series of tasks in build.boot)
+- Hosting bootstrapped clojurescript compiler in browser
+-- access DSL e.g. chipee.gates/<functions>; use (ns cljs.user) optionally?
+- WIP: Expanding defn'ed gates to support dynamic Fault Tree Analysis
+- TODO: Probably modify spec to support linking gates/nodes via atoms
+
 # Chipper
 
 Chipper is a toy DSL for expressing and reasoning about basic logical
